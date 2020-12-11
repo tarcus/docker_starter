@@ -1,0 +1,22 @@
+version: '3.5'
+
+services:
+  app:
+    container_name: express-mongo-my
+    restart: always
+    env_file: dev.env
+    build: 
+      context: ./api
+      target: dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./api:/usr/src/app 
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports: 
+      - '27017:27017'
+    

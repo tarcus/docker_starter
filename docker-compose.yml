@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  app:
+    container_name: express-mongo-my
+    environment:
+      - SOME_VAR=override
+    restart: always
+    build:
+      context: ./api
+      target: production
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+    ports: 
+      - '27017:27017'
+    volumes:
+      - mongo-dbvol:/data/db
+      - ./mongo-entrypoint/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+
+volumes:
+  mongo-dbvol:
